@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DROPZONE V - ULTRA SPEED</title>
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <style>
+        :root { --p: #bc13fe; --bg: #050505; --yt: #ff0000; --tg: #0088cc; }
+        body { background: var(--bg); color: white; font-family: sans-serif; margin: 0; text-align: center; }
+        
+        /* Auth Screen */
+        #auth-screen { position: fixed; inset: 0; background: #000; z-index: 10000; display: flex; align-items: center; justify-content: center; }
+        .login-box { background: #111; padding: 30px; border-radius: 24px; border: 1px solid var(--p); width: 320px; box-shadow: 0 0 25px rgba(188, 19, 254, 0.4); }
+        .pw-hint { font-size: 12px; color: #aaa; margin-top: 12px; font-style: italic; }
+        /* Social Buttons */
+        .social-links { margin-top: 20px; display: flex; flex-direction: column; gap: 10px; }
+        .btn-social { padding: 12px; border-radius: 10px; text-decoration: none; color: white; font-size: 13px; font-weight: bold; transition: 0.2s; display: block; }
+        .btn-yt { background: var(--yt); border-bottom: 3px solid #b00; }
+        .btn-tg { background: var(--tg); border-bottom: 3px solid #0066aa; }
+        .btn-social:active { transform: translateY(2px); border-bottom-width: 1px; }
+        /* Main App */
+        #main-app { display: none; padding: 20px; }
+        
+        /* RGB Animated Title */
+        .app-title { 
+            font-size: 32px; 
+            font-weight: 900; 
+            letter-spacing: 5px; 
+            background: linear-gradient(to right, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #8b00ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-size: 400% 400%;
+            animation: rainbow 5s ease infinite;
+            filter: drop-shadow(0 0 8px rgba(255,255,255,0.3));
+        }
+        @keyframes rainbow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .app-subtitle { font-size: 10px; color: #888; letter-spacing: 2px; margin-bottom: 20px; }
+        .input-bar { display: flex; gap: 10px; justify-content: center; margin: 15px 0; }
+        input { padding: 12px; background: #1a1a1a; border: 1px solid #333; color: white; border-radius: 8px; width: 42%; outline: none; }
+        
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 12px; padding: 10px; }
+        .card { background: #111; padding: 10px; border-radius: 15px; border: 1px solid #222; cursor: pointer; transition: 0.1s; }
+        .card:active { transform: scale(0.9); border-color: var(--p); }
+        .card img { width: 100%; border-radius: 10px; }
+        .card-name { font-size: 10px; margin-top: 8px; font-weight: bold; }
+        .footer { margin-top: 40px; padding: 20px; font-size: 11px; color: #666; border-top: 1px solid #222; }
+        .footer b { color: var(--p); }
+    </style>
+</head>
+<body>
+<div id="auth-screen">
+    <div class="login-box">
+        <h3 style="color:var(--p); margin-top:0;">TCP TERMINAL</h3>
+        <input type="password" id="pass" placeholder="ENTER PASSWORD" style="width:90%">
+        <button onclick="login()" style="margin-top:15px; background:var(--p); color:white; border:none; padding:12px 0; width:100%; border-radius:10px; font-weight:bold; cursor:pointer;">UNLOCK BOT</button>
+        <p class="pw-hint">To get password click Telegram channel</p>
+        <div class="social-links">
+            <a href="https://t.me/makhala_live" target="_blank" class="btn-social btn-tg">JOIN TELEGRAM</a>
+            <a href="https://www.youtube.com/@Vivek_maurya_108" target="_blank" class="btn-social btn-yt">SUBSCRIBE YOUTUBE</a>
+        </div>
+    </div>
+</div>
+<div id="main-app">
+    <div class="app-title">DROPZONE V</div>
+    <div class="app-subtitle">ULTRA FAST EMOTE INJECTOR</div>
+    <div class="input-bar">
+        <input type="number" id="tc" placeholder="TEAM CODE">
+        <input type="number" id="uid" placeholder="UID">
+    </div>
+    <div id="emoteGrid" class="grid"></div>
+    <div class="footer">
+        This emote panel is provided by <b>DROPZONE V</b><br>
+        Created by <b>Vivek Maurya</b>
+    </div>
+</div>
+<script>
+    const CLAN_UID = "3047678958";
+    const MAIN_API = "https://epapi-ytxx.onrender.com/join";
+    const BOT_URL = "http://176.100.37.91:30200/join";
+    const PROXY = "https://corsproxy.io/?"; 
+    const emotes = [
+        {id: "909000063", name: "AK Max"}, {id: "909000068", name: "Scar Max"},
+        {id: "909000081", name: "M1014 Max"}, {id: "909035007", name: "Shotgun Max"},
+        {id: "909000085", name: "XM8 Max"}, {id: "909040010", name: "MP40 Max"}
+    ];
+    function login() {
+        if(document.getElementById('pass').value === "55") {
+            document.getElementById('auth-screen').style.display = 'none';
+            document.getElementById('main-app').style.display = 'block';
+            render();
+        } else {
+            Toastify({text: "Wrong Password", background: "red"}).showToast();
+        }
+    }
+    function render() {
+        document.getElementById('emoteGrid').innerHTML = emotes.map(e => `
+            <div class="card" onclick="runCommand('${e.id}', '${e.name}')">
+                <img src="https://cdn.jsdelivr.net/gh/ShahGCreator/icon@main/PNG/${e.id}.png">
+                <div class="card-name">${e.name}</div>
+            </div>
+        `).join('');
+    }
+    // SPEED OPTIMIZATION: Non-blocking Fire
+    function runCommand(eid, name) {
+        const tc = document.getElementById('tc').value;
+        const uid = document.getElementById('uid').value;
+        if(!tc || !uid) return;
+        const params = `?tc=${tc}&uid1=${uid}&emote_id=${eid}&eid=${eid}&clan=${CLAN_UID}`;
+        const finalMain = MAIN_API + params;
+        const finalBot = PROXY + encodeURIComponent(BOT_URL + params);
+        // Firing both instantly
+        Promise.all([
+            fetch(finalMain, { mode: 'no-cors' }),
+            fetch(finalBot, { mode: 'no-cors' })
+        ]);
+        Toastify({
+            text: `SPEED INJECT: ${name}`,
+            duration: 500,
+            style: { background: "linear-gradient(to right, #00ff00, #008800)" }
+        }).showToast();
+    }
+</script>
+</body>
+</html>
